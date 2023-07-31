@@ -1,7 +1,3 @@
-# TODO: 
-# 1) Create a reset button
-# 2) Debug issues
-
 # Tic-Tac-Toe
 from guizero import App, Box, PushButton, Text
 
@@ -38,30 +34,31 @@ def check_win():
     winner = None
 
     # Vertical lines --> |
-    if (board_square[0][0].text == board_square[0][1].text == board_square[0][2].text): 
+    if (board_square[0][0].text == board_square[0][1].text == board_square[0][2].text) and (board_square[0][2].text in ["X", "O"]): 
         winner = board_square[0][0]
 
-    elif (board_square[1][0].text == board_square[1][1].text == board_square[1][2].text):
+    # This condition check the text "X" and "O" correctly.
+    elif (board_square[1][0].text == board_square[1][1].text == board_square[1][2].text) and (board_square[1][2].text in ["X", "O"]):
         winner = board_square[1][0]
 
-    elif (board_square[2][0].text == board_square[2][1].text == board_square[2][2].text):
+    elif (board_square[2][0].text == board_square[2][1].text == board_square[2][2].text) and board_square[2][2].text in ["X", "O"]:
         winner = board_square[2][0]
     
-    # Horizontal lines --> -- # This condition and board_square[2][0].text in ["X", "O"] is not needed.
+    # Horizontal lines --> -- # This condition and board_square[2][0].text in ["X", "O"] is indeed needed.
     elif (board_square[0][0].text == board_square[1][0].text == board_square[2][0].text) and board_square[2][0].text in ["X", "O"]:
         winner = board_square[0][0]
 
-    elif (board_square[0][1].text == board_square[1][1].text == board_square[2][1].text):
+    elif (board_square[0][1].text == board_square[1][1].text == board_square[2][1].text) and board_square[2][1].text in ["X", "O"]:
         winner = board_square[0][1]
 
-    elif (board_square[0][2].text == board_square[1][2].text == board_square[2][2].text):
+    elif (board_square[0][2].text == board_square[1][2].text == board_square[2][2].text) and board_square[2][2].text in ["X", "O"]:
         winner = board_square[0][2]
 
     # Diagonal lines
     elif (board_square[0][0].text == board_square[1][1].text == board_square[2][2].text) and board_square[2][2].text in ["X", "O"]:
         winner = board_square[0][0]
  
-    elif (board_square[2][0].text == board_square[1][1].text == board_square[0][2].text):
+    elif (board_square[2][0].text == board_square[1][1].text == board_square[0][2].text) and board_square[0][2].text in ["X", "O"]:
         winner = board_square[2][0]
 
     if winner is not None:
@@ -80,20 +77,32 @@ def moves_taken():
     return moves
 
 
+def reset():
+    global board_square, message
+    board_square = clear_board()
+
 
 turn = "X"
 
 app = App(title = "Tic Tac Toe")
 
+big_title = Text(master = app, text = "👉Tic Tac Toe👈")
+big_title.size = 16
+
 board = Box(master = app, layout = "grid")
-
+board.bg = "Orange"
 board_square = clear_board()
-print(board_square)
-message = Text(master = app, text = "It is your turn, " + turn)
 
-message2 = Text(master = app, text = "I am testing the box grid layout")
-board2 = Box(master = app, layout = "grid")
-for i in range(0, 3, 1):
-    for j in range(0, 3, 1):
-        PushButton(master = board2, text = f"{i=}, {j=}", grid = [i, j], width = 3)
+message = Text(master = app, text = "It is your turn, " + turn)
+message.text_color = "red"
+
+reset_button = PushButton(master = app, command = reset, text = "Reset")
+reset_button.bg = "green"
+
+
+# message2 = Text(master = app, text = "I am testing the box grid layout")
+# board2 = Box(master = app, layout = "grid")
+# for i in range(0, 3, 1):
+#     for j in range(0, 3, 1):
+#         PushButton(master = board2, text = f"{i=}, {j=}", grid = [i, j], width = 3)
 app.display()
